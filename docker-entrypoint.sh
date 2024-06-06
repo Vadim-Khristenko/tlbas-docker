@@ -19,7 +19,7 @@ if [ -n "$TELEGRAM_LOG_FILE" ]; then
   CUSTOM_ARGS=" --log=${TELEGRAM_LOG_FILE}"
 fi
 if [ -n "$TELEGRAM_STAT" ]; then
-  CUSTOM_ARGS="${CUSTOM_ARGS} --http-stat-port=8082"
+  CUSTOM_ARGS="${CUSTOM_ARGS} --http-stat-port=8084"
 fi
 if [ -n "$TELEGRAM_FILTER" ]; then
   CUSTOM_ARGS="${CUSTOM_ARGS} --filter=$TELEGRAM_FILTER"
