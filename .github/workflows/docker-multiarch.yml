@@ -62,7 +62,7 @@ jobs:
           cat $GITHUB_ENV > github.env
 
       - name: Upload environment info as artifact
-        uses: actions/upload-artifact@3.0.0
+        uses: actions/upload-artifact@3.0
         with:
           name: github_env
           path: github.env
@@ -114,7 +114,7 @@ jobs:
           docker save ${{ env.IMAGE_TAG }}:${{ env.VERSION }}-${{ env.SAFE_ARCH }} -o ${{ env.SAFE_ARCH }}.tar
 
       - name: Upload image as artifact
-        uses: actions/upload-artifact@3.0.0
+        uses: actions/upload-artifact@3.0
         with:
           name: image_${{ env.SAFE_ARCH }}
           path: ${{ env.SAFE_ARCH }}.tar
