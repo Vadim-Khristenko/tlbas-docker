@@ -28,8 +28,10 @@ COPY --from=build /usr/src/telegram-bot-api/bin/telegram-bot-api /usr/local/bin/
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 COPY nginx.conf /etc/nginx/nginx.conf
 
-RUN addgroup -g 101 -S telegram-bot-api \
- && adduser -S -D -H -u 101 -h ${TELEGRAM_WORK_DIR} -s /sbin/nologin -G telegram-bot-api -g telegram-bot-api telegram-bot-api \
+RUN NEW_GID=$(($(cat /etc/group | cut -d: -f3 | sort -n | tail -1) + 1)) \
+ && NEW_UID=$(($(cat /etc/passwd | cut -d: -f3 | sort -n | tail -1) + 1)) \
+ && addgroup -g $NEW_GID -S telegram-bot-api \
+ && adduser -S -D -H -u $NEW_UID -h ${TELEGRAM_WORK_DIR} -s /sbin/nologin -G telegram-bot-api -g telegram-bot-api telegram-bot-api \
  && chmod +x /docker-entrypoint.sh \
  && mkdir -p ${TELEGRAM_WORK_DIR} ${TELEGRAM_TEMP_DIR} \
  && chown telegram-bot-api:telegram-bot-api ${TELEGRAM_WORK_DIR} ${TELEGRAM_TEMP_DIR}
