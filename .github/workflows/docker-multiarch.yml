@@ -12,8 +12,8 @@ jobs:
     name: Build Docker image (${{ matrix.arch }})
     runs-on: ubuntu-latest
     env:
-      IMAGE_TAG: ${{ secrets.DOCKERHUB_OWNER }}/tlbas
-      ALPINE_VERSION: 3.20
+      IMAGE_TAG: ${{ secrets.DOCKERHUB_LOGIN }}/tlbas
+      ALPINE_VERSION: '3.20'
     strategy:
       matrix:
         arch:
