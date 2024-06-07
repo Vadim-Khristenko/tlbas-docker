@@ -4,9 +4,7 @@ set -e
 USERNAME=telegram-bot-api
 GROUPNAME=telegram-bot-api
 
-chown ${USERNAME}:${GROUPNAME} "${TELEGRAM_WORK_DIR}"
-
-nginx
+chown -R ${USERNAME}:${GROUPNAME} "${TELEGRAM_WORK_DIR}" "${TELEGRAM_TEMP_DIR}"
 
 if [ -n "${1}" ]; then
   exec "${*}"
@@ -48,3 +46,4 @@ COMMAND="telegram-bot-api ${DEFAULT_ARGS}${CUSTOM_ARGS}"
 echo "$COMMAND"
 # shellcheck disable=SC2086
 exec $COMMAND
+nginx -g 'daemon off;'
