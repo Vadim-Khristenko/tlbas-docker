@@ -5,7 +5,7 @@ ENV CXXFLAGS=""
 WORKDIR /usr/src/telegram-bot-api
 
 RUN apk update && apk upgrade --no-cache
-RUN apk add --no-cache --update alpine-sdk linux-headers git zlib-dev openssl-dev gperf cmake php
+RUN apk add --no-cache --update alpine-sdk linux-headers git zlib-dev openssl-dev gperf cmake
 COPY telegram-bot-api /usr/src/telegram-bot-api
 ARG nproc=1
 RUN mkdir -p build \
@@ -19,22 +19,14 @@ FROM alpine:${ALPINE_VERSION}
 ENV TELEGRAM_WORK_DIR="/var/lib/telegram-bot-api" \
     TELEGRAM_TEMP_DIR="/tmp/telegram-bot-api"
 
-# Установка зависимостей
-RUN apk add --no-cache --update openssl libstdc++ nginx
-
-# Копирование собранного Telegram Bot API
+RUN apk add --no-cache --update openssl libstdc++
 COPY --from=build /usr/src/telegram-bot-api/bin/telegram-bot-api /usr/local/bin/telegram-bot-api
-
-# Копирование конфигураций и скриптов
 COPY docker-entrypoint.sh /docker-entrypoint.sh
-COPY nginx.conf /etc/nginx/nginx.conf
-
-RUN addgroup -g 118 -S telegram-bot-api \
- && adduser -S -D -H -u 118 -h ${TELEGRAM_WORK_DIR} -s /sbin/nologin -G telegram-bot-api -g telegram-bot-api telegram-bot-api \
+RUN addgroup -g 101 -S telegram-bot-api \
+ && adduser -S -D -H -u 101 -h ${TELEGRAM_WORK_DIR} -s /sbin/nologin -G telegram-bot-api -g telegram-bot-api telegram-bot-api \
  && chmod +x /docker-entrypoint.sh \
  && mkdir -p ${TELEGRAM_WORK_DIR} ${TELEGRAM_TEMP_DIR} \
  && chown telegram-bot-api:telegram-bot-api ${TELEGRAM_WORK_DIR} ${TELEGRAM_TEMP_DIR}
 
-
-EXPOSE 8081/tcp 8085/tcp
+EXPOSE 8081/tcp 8082/tcp
 ENTRYPOINT ["/docker-entrypoint.sh"]
